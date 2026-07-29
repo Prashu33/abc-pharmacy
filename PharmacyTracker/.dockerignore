@@ -1,0 +1,20 @@
+# Ignore build outputs
+**/bin/
+**/obj/
+**/log/
+
+# Ignore IDE files
+**/.vs/
+**/.vscode/
+**/*.user
+**/*.suo
+**/*.sln.docstates
+
+# Ignore git data
+**/.git/
+**/.gitignore
+
+# Ignore local temporary/data files
+**/*.tmp
+**/Data/
+wwwroot/node_modules/
