@@ -58,6 +58,12 @@ async function refreshInventory() {
     if (currentSelectVal) {
       saleMedicineSelect.value = currentSelectVal;
     }
+
+    // Update Quick Statistics from un-filtered dataset
+    const allMedicines = await api.getMedicines();
+    document.getElementById('stats-total-meds').textContent = allMedicines.length;
+    document.getElementById('stats-expiry-alerts').textContent = allMedicines.filter(m => m.isNearExpiry).length;
+    document.getElementById('stats-low-stock').textContent = allMedicines.filter(m => m.isLowStock).length;
   } catch (err) {
     showToast(err.message, 'danger');
   }
@@ -67,6 +73,11 @@ async function refreshInventory() {
 async function refreshSalesHistory() {
   try {
     const sales = await api.getSales();
+    
+    // Calculate total revenue
+    const totalRev = sales.reduce((sum, s) => sum + s.totalAmount, 0);
+    document.getElementById('stats-revenue').textContent = `₹${totalRev.toFixed(2)}`;
+
     if (sales.length === 0) {
       salesHistoryBody.innerHTML = `
         <tr>
@@ -82,10 +93,10 @@ async function refreshSalesHistory() {
       const saleDate = new Date(s.saleDate).toLocaleString();
       return `
         <tr>
-          <td style="font-weight: 600; color: var(--ink);">${escapeHtml(s.medicineName)}</td>
+          <td style="font-weight: 600; color: #fff;">${escapeHtml(s.medicineName)}</td>
           <td class="mono">${s.quantitySold}</td>
           <td class="mono">₹${s.unitPriceAtSale.toFixed(2)}</td>
-          <td class="mono" style="font-weight: 600;">₹${s.totalAmount.toFixed(2)}</td>
+          <td class="mono" style="font-weight: 600; color: var(--primary);">₹${s.totalAmount.toFixed(2)}</td>
           <td class="mono">${saleDate}</td>
         </tr>
       `;

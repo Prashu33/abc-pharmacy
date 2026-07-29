@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ABC Pharmacy Medicine Tracker</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/site.css">
 </head>
 <body>
@@ -29,6 +28,46 @@
       <button class="tab-btn" data-tab="tab-sales">Sales History Log</button>
     </div>
 
+    <!-- Quick Statistics Banner -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-info">
+          <span class="stat-label">Total Medicines</span>
+          <span class="stat-value" id="stats-total-meds">0</span>
+        </div>
+        <div class="stat-icon cyan">
+          <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"></path></svg>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-info">
+          <span class="stat-label">Expiry Alerts</span>
+          <span class="stat-value" id="stats-expiry-alerts">0</span>
+        </div>
+        <div class="stat-icon red">
+          <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"></path></svg>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-info">
+          <span class="stat-label">Low Stock Alerts</span>
+          <span class="stat-value" id="stats-low-stock">0</span>
+        </div>
+        <div class="stat-icon yellow">
+          <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"></path></svg>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-info">
+          <span class="stat-label">Total Revenue</span>
+          <span class="stat-value" id="stats-revenue">₹0.00</span>
+        </div>
+        <div class="stat-icon green">
+          <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        </div>
+      </div>
+    </div>
+
     <!-- TAB: Inventory Dashboard -->
     <div id="tab-inventory" class="tab-content active">
       <div class="grid-layout">
@@ -36,7 +75,10 @@
         <!-- Left Side: Table & Search -->
         <div>
           <div class="card" style="margin-bottom: 0;">
-            <div class="card-title">Medicine Inventory Stock</div>
+            <div class="card-title">
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" style="color: var(--primary);"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zM3.75 12h.007v.008H3.75V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm-.375 5.25h.007v.008H3.75v-.008zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"></path></svg>
+              Medicine Inventory Stock
+            </div>
             
             <!-- Search Bar -->
             <div class="search-container">
@@ -81,7 +123,10 @@
         <div>
           <!-- Card: Record a Sale -->
           <div class="card" id="record-sale-card">
-            <div class="card-title">Record a Sale</div>
+            <div class="card-title">
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" style="color: var(--success);"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5h.007v.008H3.75V4.5zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zM3.75 12h.007v.008H3.75V12zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm-.375 5.25h.007v.008H3.75v-.008zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"></path></svg>
+              Record a Sale
+            </div>
             <form id="record-sale-form">
               <div class="form-group">
                 <label for="sale-medicine-select">Select Medicine</label>
@@ -96,7 +141,7 @@
                 </div>
                 <div class="form-group">
                   <label>Total Amount</label>
-                  <div id="sale-total-amount" class="mono" style="font-weight: 700; font-size: 1.2rem; color: var(--primary); padding-top: 0.5rem;">₹0.00</div>
+                  <div id="sale-total-amount" class="mono" style="font-weight: 700; font-size: 1.3rem; color: var(--primary); padding-top: 0.5rem;">₹0.00</div>
                 </div>
               </div>
               <button type="submit" class="btn btn-primary" style="width: 100%;">Record Sale Transaction</button>
@@ -105,7 +150,10 @@
 
           <!-- Card: Add Medicine -->
           <div class="card">
-            <div class="card-title">Add New Medicine</div>
+            <div class="card-title">
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" style="color: var(--primary);"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+              Add New Medicine
+            </div>
             <form id="add-medicine-form">
               <div class="form-group">
                 <label for="add-name">Full Name</label>
@@ -146,7 +194,10 @@
     <!-- TAB: Sales History Log -->
     <div id="tab-sales" class="tab-content">
       <div class="card">
-        <div class="card-title">Sales Transaction Log</div>
+        <div class="card-title">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" style="color: var(--success);"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+          Sales Transaction Log
+        </div>
         <div class="table-wrapper">
           <table>
             <thead>
