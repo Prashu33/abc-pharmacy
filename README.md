@@ -64,8 +64,28 @@ Open your browser and navigate to:
 - **Frontend Dashboard**: [http://localhost:5000](http://localhost:5000)
 - **Interactive Swagger Documentation**: [http://localhost:5000/swagger](http://localhost:5000/swagger)
 
-### 4. Execute Unit Tests
-To run the automated xUnit unit test suite (covering color logic computation and stock checks):
+### 3. Run the Unit Tests
+Execute the xUnit test suite (covering color flag logic and sale stock decrements):
 ```bash
 dotnet test
+```
+
+---
+
+## Running with Docker
+
+This application has been fully dockerized for quick deployment.
+
+### Run with Docker Compose
+To build and run the application container with persistent volume mapping (mapping the host `Data/` directory to the container to preserve JSON files):
+```bash
+docker-compose up --build -d
+```
+Once running, the application and Swagger UI will be available at:
+- **Frontend Dashboard**: [http://localhost:5000](http://localhost:5000)
+- **Interactive Swagger Documentation**: [http://localhost:5000/swagger](http://localhost:5000/swagger)
+
+To stop the containers:
+```bash
+docker-compose down
 ```

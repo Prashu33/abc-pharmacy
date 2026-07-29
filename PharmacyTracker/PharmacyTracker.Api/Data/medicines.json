@@ -13,7 +13,7 @@
     "fullName": "Paracetamol 650mg",
     "notes": "For fever and body pain relief.",
     "expiryDate": "2027-03-02T00:00:00Z",
-    "quantity": 6,
+    "quantity": 2,
     "price": 5.00,
     "brand": "Sun Pharma"
   },
@@ -22,7 +22,7 @@
     "fullName": "Cetirizine 10mg",
     "notes": "Anti-allergy medication.",
     "expiryDate": "2027-11-20T00:00:00Z",
-    "quantity": 85,
+    "quantity": 80,
     "price": 9.25,
     "brand": "Zydus"
   },

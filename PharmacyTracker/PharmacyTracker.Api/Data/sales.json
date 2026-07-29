@@ -16,5 +16,23 @@
     "unitPriceAtSale": 18.50,
     "totalAmount": 18.50,
     "saleDate": "2026-07-29T19:07:08.7828444Z"
+  },
+  {
+    "id": "c6b98dd8-9426-4a87-894a-d3eed8e5e39a",
+    "medicineId": "e30b809a-6a56-4d7a-8cf1-4560799480e1",
+    "medicineName": "Cetirizine 10mg",
+    "quantitySold": 5,
+    "unitPriceAtSale": 9.25,
+    "totalAmount": 46.25,
+    "saleDate": "2026-07-29T19:23:41.9023601Z"
+  },
+  {
+    "id": "578892a6-961d-4e57-8d7e-0315283010f0",
+    "medicineId": "e30b809a-6a56-4d7a-8cf1-4560799480e0",
+    "medicineName": "Paracetamol 650mg",
+    "quantitySold": 4,
+    "unitPriceAtSale": 5.00,
+    "totalAmount": 20.00,
+    "saleDate": "2026-07-29T19:23:52.3910886Z"
   }
 ]

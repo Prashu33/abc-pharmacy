@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  pharmacy-tracker:
+    image: abc-pharmacy-tracker:latest
+    build:
+      context: ./PharmacyTracker
+      dockerfile: PharmacyTracker.Api/Dockerfile
+    ports:
+      - "5000:5000"
+    volumes:
+      # Map the Data folder to host to persist medicines.json and sales.json database files
+      - ./PharmacyTracker/PharmacyTracker.Api/Data:/app/Data
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+    restart: always
