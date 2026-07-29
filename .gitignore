@@ -1,0 +1,22 @@
+# .gitignore for ASP.NET Core and Web projects
+
+# Build outputs
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+
+# IDE files
+.vs/
+.vscode/
+*.user
+*.suo
+*.sln.docstates
+
+# System files
+.DS_Store
+Thumbs.db
+
+# User specific or environment configs
+appsettings.Development.json
+appsettings.local.json
+*.tmp

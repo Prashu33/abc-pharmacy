@@ -1,0 +1,47 @@
+[
+  {
+    "id": "e30b809a-6a56-4d7a-8cf1-4560799480df",
+    "fullName": "Amoxicillin 500mg",
+    "notes": "Store in a cool dry place. Keep away from children.",
+    "expiryDate": "2026-08-11T00:00:00Z",
+    "quantity": 41,
+    "price": 18.50,
+    "brand": "Cipla"
+  },
+  {
+    "id": "e30b809a-6a56-4d7a-8cf1-4560799480e0",
+    "fullName": "Paracetamol 650mg",
+    "notes": "For fever and body pain relief.",
+    "expiryDate": "2027-03-02T00:00:00Z",
+    "quantity": 6,
+    "price": 5.00,
+    "brand": "Sun Pharma"
+  },
+  {
+    "id": "e30b809a-6a56-4d7a-8cf1-4560799480e1",
+    "fullName": "Cetirizine 10mg",
+    "notes": "Anti-allergy medication.",
+    "expiryDate": "2027-11-20T00:00:00Z",
+    "quantity": 85,
+    "price": 9.25,
+    "brand": "Zydus"
+  },
+  {
+    "id": "00dfa376-6f83-457b-ae5e-32b756e03b61",
+    "fullName": "Crocin 500 mg",
+    "notes": "",
+    "expiryDate": "2029-01-01T00:00:00Z",
+    "quantity": 100,
+    "price": 20,
+    "brand": "Cipla"
+  },
+  {
+    "id": "5bc10a7a-e650-43a8-b8d1-7058f55336ec",
+    "fullName": "Ibuprofen 400mg",
+    "notes": "Take after meals.",
+    "expiryDate": "2026-08-25T00:00:00Z",
+    "quantity": 10,
+    "price": 12.5,
+    "brand": "Abbott"
+  }
+]

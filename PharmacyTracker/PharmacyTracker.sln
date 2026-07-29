@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PharmacyTracker.Api", "PharmacyTracker.Api\PharmacyTracker.Api.csproj", "{372CD804-787F-4A99-B21E-B237B8E26D3D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PharmacyTracker.Tests", "PharmacyTracker.Tests\PharmacyTracker.Tests.csproj", "{1274075F-0B93-449F-844D-3F0D45162189}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{372CD804-787F-4A99-B21E-B237B8E26D3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{372CD804-787F-4A99-B21E-B237B8E26D3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{372CD804-787F-4A99-B21E-B237B8E26D3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{372CD804-787F-4A99-B21E-B237B8E26D3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1274075F-0B93-449F-844D-3F0D45162189}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1274075F-0B93-449F-844D-3F0D45162189}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1274075F-0B93-449F-844D-3F0D45162189}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1274075F-0B93-449F-844D-3F0D45162189}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

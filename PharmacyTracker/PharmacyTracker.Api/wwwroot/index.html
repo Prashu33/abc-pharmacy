@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ABC Pharmacy Medicine Tracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/site.css">
+</head>
+<body>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Header -->
+  <header class="app-header">
+    <div class="brand">
+      <span class="rx">℞</span> ABC Pharmacy
+    </div>
+    <div class="subtitle">Medicine Tracker · Technical Assessment</div>
+  </header>
+
+  <!-- Container -->
+  <div class="container">
+    <!-- Tabs Nav -->
+    <div class="tabs-nav">
+      <button class="tab-btn active" data-tab="tab-inventory">Inventory Dashboard</button>
+      <button class="tab-btn" data-tab="tab-sales">Sales History Log</button>
+    </div>
+
+    <!-- TAB: Inventory Dashboard -->
+    <div id="tab-inventory" class="tab-content active">
+      <div class="grid-layout">
+        
+        <!-- Left Side: Table & Search -->
+        <div>
+          <div class="card" style="margin-bottom: 0;">
+            <div class="card-title">Medicine Inventory Stock</div>
+            
+            <!-- Search Bar -->
+            <div class="search-container">
+              <input type="text" id="search-input" placeholder="Search medicines by name or brand...">
+            </div>
+
+            <!-- Table -->
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Full Name</th>
+                    <th>Brand</th>
+                    <th>Expiry Date</th>
+                    <th>Qty</th>
+                    <th>Price</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="inventory-body">
+                  <!-- JS Rendered rows -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Legend -->
+            <div class="legend">
+              <div class="legend-item">
+                <span class="legend-color danger"></span>
+                <span>Near Expiry (&lt; 30 Days)</span>
+              </div>
+              <div class="legend-item">
+                <span class="legend-color warning"></span>
+                <span>Low Stock (&lt; 10 Units)</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Right Side: Forms -->
+        <div>
+          <!-- Card: Record a Sale -->
+          <div class="card" id="record-sale-card">
+            <div class="card-title">Record a Sale</div>
+            <form id="record-sale-form">
+              <div class="form-group">
+                <label for="sale-medicine-select">Select Medicine</label>
+                <select id="sale-medicine-select" required>
+                  <option value="">-- Select Medicine --</option>
+                </select>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="sale-qty">Quantity</label>
+                  <input type="number" id="sale-qty" min="1" placeholder="Qty" required>
+                </div>
+                <div class="form-group">
+                  <label>Total Amount</label>
+                  <div id="sale-total-amount" class="mono" style="font-weight: 700; font-size: 1.2rem; color: var(--primary); padding-top: 0.5rem;">₹0.00</div>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary" style="width: 100%;">Record Sale Transaction</button>
+            </form>
+          </div>
+
+          <!-- Card: Add Medicine -->
+          <div class="card">
+            <div class="card-title">Add New Medicine</div>
+            <form id="add-medicine-form">
+              <div class="form-group">
+                <label for="add-name">Full Name</label>
+                <input type="text" id="add-name" name="fullName" placeholder="e.g. Paracetamol 650mg" required>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="add-brand">Brand</label>
+                  <input type="text" id="add-brand" name="brand" placeholder="e.g. Sun Pharma" required>
+                </div>
+                <div class="form-group">
+                  <label for="add-expiry">Expiry Date</label>
+                  <input type="date" id="add-expiry" name="expiryDate" required>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="add-qty">Initial Quantity</label>
+                  <input type="number" id="add-qty" name="quantity" min="0" placeholder="0" required>
+                </div>
+                <div class="form-group">
+                  <label for="add-price">Price (₹)</label>
+                  <input type="number" id="add-price" name="price" min="0.01" step="0.01" placeholder="0.00" required>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="add-notes">Notes / Storage Instructions</label>
+                <textarea id="add-notes" name="notes" rows="3" placeholder="Storage tips or contraindications..."></textarea>
+              </div>
+              <button type="submit" class="btn btn-secondary" style="width: 100%;">Add to Inventory</button>
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- TAB: Sales History Log -->
+    <div id="tab-sales" class="tab-content">
+      <div class="card">
+        <div class="card-title">Sales Transaction Log</div>
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Medicine Name</th>
+                <th>Quantity Sold</th>
+                <th>Unit Price At Sale</th>
+                <th>Total Transaction Amount</th>
+                <th>Sale Date & Time</th>
+              </tr>
+            </thead>
+            <tbody id="sales-history-body">
+              <!-- JS Rendered rows -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Detail Modal -->
+  <div id="detail-modal" class="modal-backdrop">
+    <div class="modal">
+      <div class="modal-header">
+        <div id="modal-title" class="modal-title">Medicine Details</div>
+        <button class="modal-close">&times;</button>
+      </div>
+      <div id="modal-content" class="modal-body">
+        <!-- JS Rendered content -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary btn-modal-close">Close View</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

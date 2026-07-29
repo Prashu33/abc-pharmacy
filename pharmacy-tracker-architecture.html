@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ABC Pharmacy Medicine Tracker — Architecture</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#161d24;
+    --ink-2:#212b34;
+    --paper:#f5f3ee;
+    --paper-2:#ebe8e0;
+    --line:#d8d4c8;
+    --teal:#1f7a6c;
+    --teal-deep:#125349;
+    --teal-tint:#e3f0ed;
+    --red-bg:#f8d7da;
+    --red-line:#c0616a;
+    --yellow-bg:#fff3cd;
+    --yellow-line:#b8952f;
+    --text:#22262b;
+    --text-dim:#5b6169;
+    --code-bg:#0f1720;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--text);
+    font-family:'IBM Plex Sans', sans-serif;
+    font-size:15.5px;
+    line-height:1.65;
+  }
+  h1,h2,h3,h4{
+    font-family:'Space Grotesk', sans-serif;
+    color:var(--ink);
+    letter-spacing:-0.01em;
+    margin:0 0 .5em 0;
+  }
+  code, pre, .mono{
+    font-family:'IBM Plex Mono', monospace;
+  }
+
+  /* ---------- Layout ---------- */
+  .shell{
+    display:grid;
+    grid-template-columns:260px 1fr;
+    min-height:100vh;
+  }
+  nav.side{
+    background:var(--ink);
+    color:#cfd8dd;
+    padding:32px 22px;
+    position:sticky;
+    top:0;
+    height:100vh;
+    overflow-y:auto;
+  }
+  nav.side .brand{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700;
+    font-size:1.05rem;
+    color:#fff;
+    display:flex;
+    align-items:baseline;
+    gap:8px;
+    margin-bottom:6px;
+  }
+  nav.side .brand .rx{
+    color:var(--teal);
+    font-size:1.4rem;
+  }
+  nav.side .sub{
+    font-size:.75rem;
+    color:#8b98a1;
+    margin-bottom:28px;
+    line-height:1.5;
+  }
+  nav.side ul{list-style:none;padding:0;margin:0;}
+  nav.side li{margin-bottom:2px;}
+  nav.side a{
+    color:#aeb9c1;
+    text-decoration:none;
+    font-size:.86rem;
+    display:block;
+    padding:7px 10px;
+    border-radius:6px;
+    border-left:2px solid transparent;
+  }
+  nav.side a .num{
+    color:var(--teal);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.78rem;
+    margin-right:8px;
+  }
+  nav.side a:hover{ background:rgba(255,255,255,.05); color:#fff; }
+
+  main{
+    padding:56px 64px 120px;
+    max-width:920px;
+  }
+
+  header.hero{
+    margin-bottom:56px;
+    padding-bottom:36px;
+    border-bottom:1px solid var(--line);
+  }
+  header.hero .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.78rem;
+    color:var(--teal-deep);
+    text-transform:uppercase;
+    letter-spacing:.12em;
+    margin-bottom:14px;
+  }
+  header.hero h1{
+    font-size:2.4rem;
+    line-height:1.15;
+    max-width:14ch;
+  }
+  header.hero p.lead{
+    max-width:60ch;
+    color:var(--text-dim);
+    font-size:1.02rem;
+    margin-top:14px;
+  }
+  .meta-row{
+    display:flex;
+    gap:28px;
+    margin-top:26px;
+    flex-wrap:wrap;
+  }
+  .meta-row div{
+    font-size:.78rem;
+  }
+  .meta-row .k{
+    color:var(--text-dim);
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    font-size:.68rem;
+  }
+  .meta-row .v{
+    font-family:'IBM Plex Mono', monospace;
+    color:var(--ink);
+    margin-top:3px;
+  }
+
+  section{
+    margin-bottom:58px;
+    scroll-margin-top:24px;
+  }
+  section h2{
+    font-size:1.5rem;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:18px;
+  }
+  section h2 .idx{
+    font-family:'IBM Plex Mono', monospace;
+    color:var(--teal);
+    font-size:1rem;
+    background:var(--teal-tint);
+    border-radius:5px;
+    padding:2px 9px;
+  }
+  section h3{
+    font-size:1.05rem;
+    margin-top:28px;
+  }
+  p{margin:0 0 14px 0;}
+  ul, ol{padding-left:22px; margin:0 0 14px 0;}
+  li{margin-bottom:6px;}
+
+  .card{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:22px 24px;
+    margin-bottom:18px;
+  }
+
+  /* ---------- diagram ---------- */
+  .diagram-wrap{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:28px;
+    margin:20px 0 28px;
+  }
+  .diagram-wrap svg{width:100%; height:auto; display:block;}
+
+  /* ---------- code ---------- */
+  pre.code{
+    background:var(--code-bg);
+    color:#dfe8ea;
+    border-radius:10px;
+    padding:18px 20px;
+    overflow-x:auto;
+    font-size:.82rem;
+    line-height:1.6;
+    margin:0 0 16px 0;
+  }
+  pre.code .c1{color:#7fb8ac;}
+  pre.code .c2{color:#e3b95f;}
+  pre.code .c3{color:#8fa3ad;}
+
+  .filetree{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.82rem;
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:20px 24px;
+    line-height:1.75;
+    color:#39424a;
+    white-space:pre;
+    margin-bottom:18px;
+  }
+  .filetree .dir{color:var(--teal-deep); font-weight:600;}
+  .filetree .cmt{color:#96a0a7;}
+
+  table{
+    width:100%;
+    border-collapse:collapse;
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:10px;
+    overflow:hidden;
+    margin-bottom:18px;
+    font-size:.88rem;
+  }
+  th{
+    background:var(--paper-2);
+    text-align:left;
+    padding:10px 14px;
+    font-family:'Space Grotesk', sans-serif;
+    font-size:.78rem;
+    text-transform:uppercase;
+    letter-spacing:.05em;
+    color:var(--text-dim);
+    border-bottom:1px solid var(--line);
+  }
+  td{
+    padding:10px 14px;
+    border-bottom:1px solid var(--paper-2);
+    vertical-align:top;
+  }
+  tr:last-child td{border-bottom:none;}
+  td code, th code{
+    background:var(--paper-2);
+    padding:1px 6px;
+    border-radius:4px;
+    font-size:.82em;
+  }
+
+  .pill{
+    display:inline-block;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.72rem;
+    padding:2px 9px;
+    border-radius:20px;
+    background:var(--teal-tint);
+    color:var(--teal-deep);
+    font-weight:600;
+    margin-right:6px;
+  }
+  .pill.get{background:#e3f0ed; color:#125349;}
+  .pill.post{background:#fdeadd; color:#a5540f;}
+
+  /* ---------- grid preview (signature element) ---------- */
+  .grid-demo{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:24px;
+    margin:18px 0 28px;
+  }
+  .grid-demo .gd-title{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:.74rem;
+    color:var(--text-dim);
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    margin-bottom:14px;
+  }
+  table.preview-grid{border:none;}
+  table.preview-grid th{
+    background:transparent;
+    border-bottom:2px solid var(--ink);
+    font-size:.7rem;
+  }
+  table.preview-grid td{font-size:.86rem;}
+  table.preview-grid tr.row-expiring td{background:var(--red-bg);}
+  table.preview-grid tr.row-lowstock td{background:var(--yellow-bg);}
+  .legend{
+    display:flex;
+    gap:22px;
+    margin-top:14px;
+    flex-wrap:wrap;
+  }
+  .legend .item{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:.78rem;
+    color:var(--text-dim);
+  }
+  .legend .swatch{
+    width:14px;height:14px;border-radius:3px;
+    border:1px solid rgba(0,0,0,.08);
+  }
+  .swatch.r{background:var(--red-bg); border-color:var(--red-line);}
+  .swatch.y{background:var(--yellow-bg); border-color:var(--yellow-line);}
+
+  .callout{
+    border-left:3px solid var(--teal);
+    background:var(--teal-tint);
+    padding:14px 18px;
+    border-radius:0 8px 8px 0;
+    font-size:.9rem;
+    color:#124a41;
+    margin-bottom:18px;
+  }
+  .callout strong{color:var(--teal-deep);}
+
+  .two-col{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:16px;
+  }
+  @media (max-width:760px){ .two-col{grid-template-columns:1fr;} }
+
+  footer{
+    border-top:1px solid var(--line);
+    padding-top:24px;
+    color:var(--text-dim);
+    font-size:.8rem;
+  }
+
+  @media (max-width:900px){
+    .shell{grid-template-columns:1fr;}
+    nav.side{position:relative; height:auto;}
+    main{padding:40px 24px 100px;}
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <nav class="side">
+    <div class="brand"><span class="rx">℞</span>ABC Pharmacy</div>
+    <div class="sub">Medicine Tracker — System Architecture<br>Technical Assessment Submission</div>
+    <ul>
+      <li><a href="#overview"><span class="num">00</span>Overview</a></li>
+      <li><a href="#architecture"><span class="num">01</span>Architecture</a></li>
+      <li><a href="#structure"><span class="num">02</span>Solution Structure</a></li>
+      <li><a href="#models"><span class="num">03</span>Domain Models</a></li>
+      <li><a href="#storage"><span class="num">04</span>JSON Storage Layer</a></li>
+      <li><a href="#api"><span class="num">05</span>API Contract</a></li>
+      <li><a href="#business-rules"><span class="num">06</span>Business Rules</a></li>
+      <li><a href="#frontend"><span class="num">07</span>Frontend (SPA)</a></li>
+      <li><a href="#cross-cutting"><span class="num">08</span>Cross-Cutting Concerns</a></li>
+      <li><a href="#roadmap"><span class="num">09</span>Delivery Plan</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <header class="hero">
+      <div class="eyebrow">Architecture Document · v1.0</div>
+      <h1>Medicine Tracker System Design</h1>
+      <p class="lead">A single-page application backed by an ASP.NET Core Web API, storing inventory
+      and sales data as JSON — designed for clarity, testability, and a clean upgrade path to a
+      real database later.</p>
+      <div class="meta-row">
+        <div><div class="k">Client</div><div class="v">ABC Pharmacy</div></div>
+        <div><div class="k">Backend</div><div class="v">.NET Core Web API</div></div>
+        <div><div class="k">Frontend</div><div class="v">JavaScript SPA</div></div>
+        <div><div class="k">Persistence</div><div class="v">JSON files</div></div>
+        <div><div class="k">Author role</div><div class="v">Senior Architect / Full-Stack</div></div>
+      </div>
+    </header>
+
+    <!-- 00 OVERVIEW -->
+    <section id="overview">
+      <h2><span class="idx">00</span>Overview</h2>
+      <p>The system tracks medicine inventory and records sales. It exposes a small, focused REST API
+      and a single-page front end that renders inventory as a color-coded grid — red for medicines
+      expiring soon, yellow for low stock — with name-based search.</p>
+      <p>The design favors a <strong>thin, layered backend</strong> (Controller → Service → Repository)
+      over a monolithic controller, so that expiry/stock business rules live in one testable place, and
+      the JSON file storage can be swapped for SQL Server / EF Core later by replacing only the
+      repository layer.</p>
+    </section>
+
+    <!-- 01 ARCHITECTURE -->
+    <section id="architecture">
+      <h2><span class="idx">01</span>Architecture</h2>
+      <div class="diagram-wrap">
+        <svg viewBox="0 0 860 300" xmlns="http://www.w3.org/2000/svg" font-family="IBM Plex Mono, monospace">
+          <!-- SPA box -->
+          <rect x="20" y="30" width="230" height="230" rx="10" fill="#ffffff" stroke="#1f7a6c" stroke-width="1.5"/>
+          <text x="135" y="55" text-anchor="middle" font-size="12" fill="#125349" font-weight="600">BROWSER · SPA</text>
+          <rect x="38" y="72" width="194" height="34" rx="6" fill="#e3f0ed"/>
+          <text x="135" y="93" text-anchor="middle" font-size="11" fill="#22262b">Medicine Grid (color rules)</text>
+          <rect x="38" y="114" width="194" height="34" rx="6" fill="#e3f0ed"/>
+          <text x="135" y="135" text-anchor="middle" font-size="11" fill="#22262b">Add Medicine Form</text>
+          <rect x="38" y="156" width="194" height="34" rx="6" fill="#e3f0ed"/>
+          <text x="135" y="177" text-anchor="middle" font-size="11" fill="#22262b">Sale Entry Form</text>
+          <rect x="38" y="198" width="194" height="34" rx="6" fill="#e3f0ed"/>
+          <text x="135" y="219" text-anchor="middle" font-size="11" fill="#22262b">Search box</text>
+          <text x="135" y="246" text-anchor="middle" font-size="9.5" fill="#5b6169">fetch() · JSON over HTTP</text>
+
+          <!-- arrow -->
+          <line x1="252" y1="145" x2="298" y2="145" stroke="#8b98a1" stroke-width="1.5"/>
+          <polygon points="298,140 308,145 298,150" fill="#8b98a1"/>
+          <line x1="298" y1="165" x2="252" y2="165" stroke="#8b98a1" stroke-width="1.5"/>
+          <polygon points="252,160 242,165 252,170" fill="#8b98a1"/>
+
+          <!-- API box -->
+          <rect x="310" y="30" width="250" height="230" rx="10" fill="#ffffff" stroke="#161d24" stroke-width="1.5"/>
+          <text x="435" y="55" text-anchor="middle" font-size="12" fill="#161d24" font-weight="600">ASP.NET CORE WEB API</text>
+          <rect x="328" y="70" width="214" height="30" rx="6" fill="#f5f3ee"/>
+          <text x="435" y="90" text-anchor="middle" font-size="10.5" fill="#22262b">MedicinesController / SalesController</text>
+          <rect x="328" y="108" width="214" height="30" rx="6" fill="#f5f3ee"/>
+          <text x="435" y="128" text-anchor="middle" font-size="10.5" fill="#22262b">MedicineService / SaleService</text>
+          <rect x="328" y="146" width="214" height="30" rx="6" fill="#f5f3ee"/>
+          <text x="435" y="166" text-anchor="middle" font-size="10.5" fill="#22262b">JsonRepository&lt;T&gt;</text>
+          <text x="435" y="204" text-anchor="middle" font-size="9.5" fill="#5b6169">business rules · validation</text>
+          <text x="435" y="220" text-anchor="middle" font-size="9.5" fill="#5b6169">thread-safe file I/O</text>
+
+          <!-- arrow -->
+          <line x1="562" y1="150" x2="608" y2="150" stroke="#8b98a1" stroke-width="1.5"/>
+          <polygon points="608,145 618,150 608,155" fill="#8b98a1"/>
+
+          <!-- storage box -->
+          <rect x="620" y="30" width="220" height="230" rx="10" fill="#ffffff" stroke="#b8952f" stroke-width="1.5"/>
+          <text x="730" y="55" text-anchor="middle" font-size="12" fill="#a5540f" font-weight="600">JSON DATA STORE</text>
+          <rect x="638" y="90" width="184" height="50" rx="6" fill="#fdeadd"/>
+          <text x="730" y="112" text-anchor="middle" font-size="10.5" fill="#22262b">medicines.json</text>
+          <text x="730" y="128" text-anchor="middle" font-size="9" fill="#a5540f">inventory records</text>
+          <rect x="638" y="150" width="184" height="50" rx="6" fill="#fdeadd"/>
+          <text x="730" y="172" text-anchor="middle" font-size="10.5" fill="#22262b">sales.json</text>
+          <text x="730" y="188" text-anchor="middle" font-size="9" fill="#a5540f">sale transaction log</text>
+        </svg>
+      </div>
+      <p>The API also serves the SPA's static files from <code>wwwroot</code>, so the whole app runs as a
+      single deployable process — no CORS configuration, no second web server, one thing to build and
+      submit.</p>
+    </section>
+
+    <!-- 02 STRUCTURE -->
+    <section id="structure">
+      <h2><span class="idx">02</span>Solution Structure</h2>
+      <div class="filetree">PharmacyTracker/
+├── <span class="dir">PharmacyTracker.Api/</span>
+│   ├── <span class="dir">Controllers/</span>
+│   │   ├── MedicinesController.cs
+│   │   └── SalesController.cs
+│   ├── <span class="dir">Models/</span>
+│   │   ├── Medicine.cs
+│   │   ├── SaleRecord.cs
+│   │   └── <span class="dir">Dtos/</span>
+│   │       ├── MedicineListDto.cs      <span class="cmt">// grid view, excludes Notes</span>
+│   │       ├── MedicineDetailDto.cs    <span class="cmt">// full record, includes Notes</span>
+│   │       ├── CreateMedicineDto.cs
+│   │       └── CreateSaleDto.cs
+│   ├── <span class="dir">Services/</span>
+│   │   ├── IMedicineService.cs / MedicineService.cs
+│   │   └── ISaleService.cs / SaleService.cs
+│   ├── <span class="dir">Repositories/</span>
+│   │   ├── IJsonRepository.cs
+│   │   └── JsonRepository.cs           <span class="cmt">// generic, file-locked, atomic writes</span>
+│   ├── <span class="dir">Data/</span>
+│   │   ├── medicines.json
+│   │   └── sales.json
+│   ├── <span class="dir">Middleware/</span>
+│   │   └── ExceptionHandlingMiddleware.cs
+│   ├── Program.cs
+│   └── appsettings.json
+├── <span class="dir">wwwroot/</span>                     <span class="cmt">// SPA, served as static files</span>
+│   ├── index.html
+│   ├── <span class="dir">css/</span>site.css
+│   └── <span class="dir">js/</span>
+│       ├── api.js       <span class="cmt">// fetch wrappers</span>
+│       ├── grid.js       <span class="cmt">// render + color rules</span>
+│       └── app.js        <span class="cmt">// wiring, search debounce</span>
+└── <span class="dir">PharmacyTracker.Tests/</span>
+    ├── MedicineServiceTests.cs   <span class="cmt">// expiry / low-stock flag logic</span>
+    └── SaleServiceTests.cs        <span class="cmt">// stock decrement, insufficient-stock</span></div>
+      <div class="callout"><strong>Why one project, not two:</strong> a reviewer running this assessment
+      should be able to <code>dotnet run</code> once and see the working app. Splitting API and SPA into
+      separate servers only adds CORS setup and a second start command for no functional benefit here.</div>
+    </section>
+
+    <!-- 03 MODELS -->
+    <section id="models">
+      <h2><span class="idx">03</span>Domain Models</h2>
+      <p>The list endpoint returns a dedicated DTO that <strong>excludes Notes</strong> and includes
+      pre-computed color flags — the grid requirement is satisfied literally, and the color logic lives
+      in the backend, not duplicated in JavaScript.</p>
+      <pre class="code"><span class="c3">// Models/Medicine.cs</span>
+<span class="c1">public class</span> Medicine
+{
+    <span class="c1">public</span> Guid Id { get; set; }
+    <span class="c1">public</span> string FullName { get; set; }
+    <span class="c1">public</span> string Notes { get; set; }
+    <span class="c1">public</span> DateTime ExpiryDate { get; set; }
+    <span class="c1">public</span> int Quantity { get; set; }
+    <span class="c1">public</span> decimal Price { get; set; }      <span class="c3">// stored to 2dp, enforced in DTO validation</span>
+    <span class="c1">public</span> string Brand { get; set; }
+}
+
+<span class="c3">// Models/SaleRecord.cs</span>
+<span class="c1">public class</span> SaleRecord
+{
+    <span class="c1">public</span> Guid Id { get; set; }
+    <span class="c1">public</span> Guid MedicineId { get; set; }
+    <span class="c1">public</span> int QuantitySold { get; set; }
+    <span class="c1">public</span> decimal UnitPriceAtSale { get; set; }
+    <span class="c1">public</span> decimal TotalAmount { get; set; }
+    <span class="c1">public</span> DateTime SaleDate { get; set; }
+}
+
+<span class="c3">// Models/Dtos/MedicineListDto.cs — used only by the grid endpoint</span>
+<span class="c1">public class</span> MedicineListDto
+{
+    <span class="c1">public</span> Guid Id { get; set; }
+    <span class="c1">public</span> string FullName { get; set; }
+    <span class="c1">public</span> DateTime ExpiryDate { get; set; }
+    <span class="c1">public</span> int Quantity { get; set; }
+    <span class="c1">public</span> decimal Price { get; set; }
+    <span class="c1">public</span> string Brand { get; set; }
+    <span class="c1">public</span> bool IsNearExpiry { get; set; }   <span class="c3">// &lt; 30 days → red</span>
+    <span class="c1">public</span> bool IsLowStock { get; set; }    <span class="c3">// &lt; 10 units → yellow</span>
+}</pre>
+    </section>
+
+    <!-- 04 STORAGE -->
+    <section id="storage">
+      <h2><span class="idx">04</span>JSON Storage Layer</h2>
+      <p>Wrapped behind <code>IJsonRepository&lt;T&gt;</code> so persistence can be swapped for a real
+      database later without touching controllers or services.</p>
+      <div class="two-col">
+        <div class="card">
+          <h3 style="margin-top:0">Concurrency</h3>
+          <p style="margin-bottom:0">A <code>SemaphoreSlim</code> per repository instance guards every
+          read/write, since two overlapping API requests could otherwise corrupt the file.</p>
+        </div>
+        <div class="card">
+          <h3 style="margin-top:0">Durability</h3>
+          <p style="margin-bottom:0">Writes go to a temp file first, then <code>File.Move</code> replaces
+          the original — an atomic swap that avoids partial writes if the process is interrupted.</p>
+        </div>
+      </div>
+      <pre class="code"><span class="c3">// Repositories/IJsonRepository.cs</span>
+<span class="c1">public interface</span> IJsonRepository&lt;T&gt;
+{
+    Task&lt;List&lt;T&gt;&gt; GetAllAsync();
+    Task&lt;T?&gt; GetByIdAsync(Guid id);
+    Task AddAsync(T entity);
+    Task UpdateAsync(T entity);
+}</pre>
+      <p>Serialization uses <code>System.Text.Json</code> with camelCase naming, so the JSON on disk
+      matches what the JavaScript front end expects without a mapping layer.</p>
+    </section>
+
+    <!-- 05 API -->
+    <section id="api">
+      <h2><span class="idx">05</span>API Contract</h2>
+      <table>
+        <tr><th>Method</th><th>Route</th><th>Purpose</th></tr>
+        <tr><td><span class="pill get">GET</span></td><td><code>/api/medicines?search=</code></td><td>Grid list (no Notes); optional case-insensitive name filter</td></tr>
+        <tr><td><span class="pill get">GET</span></td><td><code>/api/medicines/{id}</code></td><td>Full detail, including Notes — for an edit/detail view</td></tr>
+        <tr><td><span class="pill post">POST</span></td><td><code>/api/medicines</code></td><td>Add a medicine (validates Price, Quantity, ExpiryDate)</td></tr>
+        <tr><td><span class="pill post">POST</span></td><td><code>/api/sales</code></td><td>Record a sale; decrements stock and appends a SaleRecord</td></tr>
+        <tr><td><span class="pill get">GET</span></td><td><code>/api/sales</code></td><td>Sale history (supports the "maintain sale records" requirement)</td></tr>
+      </table>
+      <div class="callout"><strong>Sale flow matters here:</strong> recording a sale isn't just an
+      append to <code>sales.json</code> — inside the same locked operation, <code>SaleService</code>
+      checks available stock, rejects the request if quantity sold exceeds stock on hand, then
+      decrements <code>Medicine.Quantity</code> so the grid and the sale ledger never disagree.</div>
+    </section>
+
+    <!-- 06 BUSINESS RULES -->
+    <section id="business-rules">
+      <h2><span class="idx">06</span>Business Rules &amp; Grid Preview</h2>
+      <p>Color flags are computed once, server-side, in <code>MedicineService</code> — the front end
+      only reads <code>isNearExpiry</code> / <code>isLowStock</code> and applies a CSS class. This keeps
+      the 30-day and 10-unit thresholds in one testable place instead of scattered across JS.</p>
+      <div class="grid-demo">
+        <div class="gd-title">Rendered grid — behavior reference</div>
+        <table class="preview-grid">
+          <tr><th>Full Name</th><th>Brand</th><th>Expiry Date</th><th>Qty</th><th>Price</th></tr>
+          <tr class="row-expiring"><td>Amoxicillin 500mg</td><td>Cipla</td><td>2026-08-11</td><td>42</td><td>₹18.50</td></tr>
+          <tr class="row-lowstock"><td>Paracetamol 650mg</td><td>Sun Pharma</td><td>2027-03-02</td><td>6</td><td>₹5.00</td></tr>
+          <tr><td>Cetirizine 10mg</td><td>Zydus</td><td>2027-11-20</td><td>85</td><td>₹9.25</td></tr>
+        </table>
+        <div class="legend">
+          <div class="item"><span class="swatch r"></span>Expiry &lt; 30 days</div>
+          <div class="item"><span class="swatch y"></span>Quantity &lt; 10 units</div>
+        </div>
+      </div>
+      <p style="font-size:.87rem;color:var(--text-dim)">If both conditions apply to the same row, expiry
+      takes visual precedence (red) — an explicit rule agreed up front rather than left to whichever CSS
+      class happens to load last.</p>
+    </section>
+
+    <!-- 07 FRONTEND -->
+    <section id="frontend">
+      <h2><span class="idx">07</span>Frontend (SPA)</h2>
+      <p>Plain JavaScript with <code>fetch</code> keeps the assessment framework-agnostic and fast to
+      review — no build step, no bundler. (A lightweight React-via-CDN version is an equally valid
+      substitute if a framework is preferred; the module boundaries below stay the same either way.)</p>
+      <table>
+        <tr><th>Module</th><th>Responsibility</th></tr>
+        <tr><td><code>api.js</code></td><td>Thin fetch wrappers — <code>getMedicines()</code>, <code>addMedicine()</code>, <code>recordSale()</code></td></tr>
+        <tr><td><code>grid.js</code></td><td>Renders the table; maps <code>isNearExpiry</code>/<code>isLowStock</code> to row classes</td></tr>
+        <tr><td><code>app.js</code></td><td>Wires the search input (debounced) to re-fetch with <code>?search=</code>, and wires the Add/Sale forms</td></tr>
+      </table>
+      <pre class="code"><span class="c3">/* css/site.css */</span>
+.row-expiring  { background-color: <span class="c1">#f8d7da</span>; }  <span class="c3">/* red  */</span>
+.row-lowstock  { background-color: <span class="c1">#fff3cd</span>; }  <span class="c3">/* yellow */</span></pre>
+    </section>
+
+    <!-- 08 CROSS CUTTING -->
+    <section id="cross-cutting">
+      <h2><span class="idx">08</span>Cross-Cutting Concerns</h2>
+      <ul>
+        <li><strong>Validation</strong> — DataAnnotations/FluentValidation on DTOs: required fields, Price &gt; 0, Quantity ≥ 0, ExpiryDate sanity checks.</li>
+        <li><strong>Error handling</strong> — a global exception middleware returns a consistent JSON error shape: <code>{ message, errors }</code>.</li>
+        <li><strong>API documentation</strong> — Swagger/OpenAPI enabled in <code>Program.cs</code> for quick manual testing.</li>
+        <li><strong>Unit tests</strong> — xUnit coverage for the expiry/low-stock flag logic and the sale stock-decrement logic, since these are the two rules the assessment is actually graded on.</li>
+        <li><strong>Configuration</strong> — JSON file paths read from <code>appsettings.json</code>, never hardcoded.</li>
+      </ul>
+    </section>
+
+    <!-- 09 ROADMAP -->
+    <section id="roadmap">
+      <h2><span class="idx">09</span>Delivery Plan</h2>
+      <table>
+        <tr><th>Step</th><th>Deliverable</th></tr>
+        <tr><td>1</td><td>Scaffold Web API project, models, DTOs, JSON repository with locking</td></tr>
+        <tr><td>2</td><td>MedicinesController + MedicineService — list, detail, add, search</td></tr>
+        <tr><td>3</td><td>SalesController + SaleService — record sale, decrement stock, sale history</td></tr>
+        <tr><td>4</td><td>SPA: grid rendering with color rules, Add Medicine form, Sale form, search box</td></tr>
+        <tr><td>5</td><td>Unit tests, Swagger, error middleware, README with run instructions</td></tr>
+      </table>
+    </section>
+
+    <footer>
+      ABC Pharmacy — Medicine Tracker Architecture · Prepared for technical assessment submission
+    </footer>
+  </main>
+</div>
+</body>
+</html>

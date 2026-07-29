@@ -1,0 +1,20 @@
+[
+  {
+    "id": "a8776d83-e04b-4221-b026-bb993f051275",
+    "medicineId": "5bc10a7a-e650-43a8-b8d1-7058f55336ec",
+    "medicineName": "Ibuprofen 400mg",
+    "quantitySold": 5,
+    "unitPriceAtSale": 12.5,
+    "totalAmount": 62.5,
+    "saleDate": "2026-07-29T19:05:14.302593Z"
+  },
+  {
+    "id": "32d9a7fe-d941-4124-9acc-d2ee26b47738",
+    "medicineId": "e30b809a-6a56-4d7a-8cf1-4560799480df",
+    "medicineName": "Amoxicillin 500mg",
+    "quantitySold": 1,
+    "unitPriceAtSale": 18.50,
+    "totalAmount": 18.50,
+    "saleDate": "2026-07-29T19:07:08.7828444Z"
+  }
+]
